@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <title>Faturamento por Convênio</title>
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
+        <meta charset="utf-8" />
+        <style>
+        /** BASICA **/
+        *, html {
+        padding:0;
+        margin:0;
+        }
+        html {
+        font-family: 'Lato', Arial, sans-serif;
+        }
+        @media screen {
+        body {
+        display:flex; flex-direction:column;
+        align-items: center;
+        background-color: #ccc;
+        }
+        #wrap {
+        background-color: #fff;
+        padding: 50px;
+        margin: 30px;
+        box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.25);
+        }
+        #loader{
+            background-color: orangered;
+        }
+        .loader-hide {
+            display:none;
+        }
+        .orientation-retrato{width: 60%;}
+        .orientation-paisagem{width: 80%;}
+        }
+        h1, h2, h3, h4{
+        font-weight: 900;
+        }
+        h1 {
+        font-size: 15px;
+        color: <%= color  %>;
+        }
+        h2 {
+        font-size: 15px;
+        color: <%= color  %>;
+        padding-top: 10px;
+        margin-top: 10px;
+        border-top: 1px solid <%= color  %>;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid <%= color  %>;
+        text-transform: uppercase;
+        }
+        h3 {
+        font-size: 12px;
+        color: <%= color  %>;
+        text-transform: uppercase;
+        }
+        strong {
+        font-weight: 700;
+        font-size: 12px;
+        color: #444;
+        }
+        p {
+        font-weight: 400;
+        font-size: 12px;
+        color: #444;
+        text-transform: capitalize;
+        }
+        .row {
+        display:flex;
+        flex-direction: row;
+        /* margin-bottom: 2px; */
+        }
+        /** HEADER **/
+        header{
+        display:flex;
+        flex-direction: row;
+        align-items:center;
+        margin-bottom: 20px;
+        }
+        header div:first-child{
+        flex:1
+        }
+        header h1 {
+        font-size: 18px;
+        text-transform: uppercase;
+        margin-bottom: 3px;
+        }
+        header strong {
+        margin-right: 3px;
+        }
+        header strong {
+        margin-bottom: 3px;
+        }
+        header p, header strong {
+        font-size:15px;
+        }
+        .logotipo {
+        padding-left:50px
+        }
+        .logotipo img{max-height: 40px;}
+        @media screen {
+            .logotipo img{max-height: 60px;}
+        }
+        /** CONTENT **/
+        .plano {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            border-left: 5px solid <%= color  %>;
+            padding: 15px;
+        }
+        .plano p, .plano strong {
+            font-size:14px;
+        }
+        .data {
+        padding-bottom: 20px;
+        }
+        .data-last-of-type {
+        padding-bottom: 20px;
+        }
+        .cabecalho {
+        display:flex;
+        align-items: center;
+        padding-bottom: 10px;
+        margin-bottom: 0px;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: #444;
+        }
+        .cabecalho h3 {
+        color: #444;
+        }
+        .trans {
+        display: flex;
+        align-items: center;
+        padding: 5px 0;
+        border-bottom: 1px dotted #ccc;
+        }
+        .trans-last-of-type {
+        padding: 5px 0;
+        border-bottom: 0;
+        margin-bottom: -10px;
+        }
+        .totalgeral {
+        display:flex;
+        align-items: center;
+        padding-top: 10px;
+        margin-top: 10px;
+        border-top-width: 1px;
+        border-top-style: dotted;
+        border-top-color: #ccc;
+        }
+        .totalgeral h3 {
+        color: #444;
+        }
+        .resumo {
+        padding-bottom: 30px;
+        }
+        .resumo h2 {
+        margin-bottom: 0;
+        }
+        .totalizador{
+        display: flex;
+        align-items: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: solid 1px #ccc;
+        }
+
+        .totalizador:last-child {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: solid 1px <%= color  %>;
+        }
+
+        .totalizador h4 {
+        font-size: 13px;
+        text-transform: uppercase;
+        color: <%= color  %>;
+        }
+
+        .totalizador-valor {
+        display: flex;
+        }
+
+        .totalizador-valor strong{
+        display: flex;
+        font-size: 13px;
+        padding-right: 5px;
+        }
+
+        .totalizador-valor p{
+        font-size: 13px;
+        }
+        .assinaturas {
+        display:flex;
+        }
+
+        .nomes {
+        display: flex;
+        flex:1;
+        flex-direction: column;
+        align-items: center;
+        margin:60px 30px 30px 30px;
+        font-size: 13px;
+        text-transform: uppercase;
+        }
+
+        .assinaturalinha {
+        width: 100%;
+        border-bottom: 1px solid #444;
+        margin-bottom: 15px;
+        }
+        </style>
+    </head>
+    <body>
+        <%if (size === 'retrato') { %>
+        <div id="wrap" class="orientation-retrato">
+        <% } else { %>
+        <div id="wrap" class="orientation-paisagem">
+        <% } %>
+            <!-- HEADER -->
+            <header>
+                <div>
+                    <h1>Faturamento por Convênio</h1>
+                    <p><strong>Período:</strong><%=start%> a <%=end%></p>
+                    <p class="emissao"><strong>Emissão:</strong><%=now%></p>
+                    <p class="operador"><strong>Operador:</strong><%=profile.nome%></p>
+                </div>
+                <%if (logo) { %>
+                    <div class="logotipo">
+                        <img src="<%= logo %>">
+                    </div>
+                <% } %>
+            </header>
+            <!-- HEADER -->
+            <!-- PLANO -->
+            <div class="row plano">
+                <div style="width: 100%">
+                    <p style="padding-bottom:5px;"><strong>Convênio:</strong> <%=data.dados[0].exames[0].razao%><strong style="padding-left:30px;">Plano:</strong> <%=data.dados[0].exames[0].descplano%><strong style="padding-left:30px;">Valor CH:</strong> <%=data.dados[0].exames[0].valch%></p>
+                    <p><strong>CGC/CNPJ:</strong> <%=data.dados[0].exames[0].cgc_cpf%><strong style="padding-left:30px;">Endereço:</strong> <%=data.dados[0].exames[0].endereco%></p>
+                </div>
+            </div>
+            <!-- PLANO -->
+            <!-- EXTRATO -->
+            <% data.dados.forEach( (item,index,array) => {%>
+                <% if (index === (array.length -1)) { %>
+                <div class="data-last-of-type">
+                <% } else { %>
+                <div class="data">
+                <% } %>
+                <div class="row cabecalho">
+                    <div style="width: 10%">
+                        <strong><%= item.postoamostra %></strong>
+                    </div>
+                    <div style="width: 10%">
+                        <strong><%= item.dataentra %></strong>
+                    </div>
+                    <div style="width: 50%">
+                        <strong><%= item.nome %></strong>
+                    </div>
+                    <div style="width: 10%;text-align:center">
+                        <strong>AMB</strong>
+                    </div>
+                    <div style="width: 8%;text-align:center">
+                        <strong>Ch's</strong>
+                    </div>
+                    <div style="width: 12%">
+                        <strong>Procedimento</strong>
+                    </div>
+                </div>
+                <!-- TRASACOES -->
+                <% item.exames.forEach( (exm,index,array) => {%>
+                    <% if (index === (array.length -1)) { %>
+                        <div class="row trans-last-of-type">
+                    <% } else { %>
+                        <div class="row trans">
+                    <% } %>
+                    <div style="width: 50%">
+                        <p><%= exm.codigo.trim() %> | <%= exm.descexame.trim() %></p>
+                    </div>
+                    <div style="width: 20%">
+                        <p><%= exm.descplano.trim() %></p>
+                    </div>
+                    <div style="width: 10%;text-align:center">
+                        <p><%= exm.amb %></p>
+                    </div>
+                    <div style="width: 8%;text-align:center">
+                        <p><%= parseFloat(exm.valorexa).toLocaleString('pt-br', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                            }) %></p>
+                    </div>
+                    <div style="width: 12%;">
+                        <p>R$ <%= parseFloat(exm.valconvenio).toLocaleString('pt-br', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                            }) %></p>
+                    </div>
+                </div>
+                <% });%>
+                <!-- SUB TOTAL -->
+                <div class="row totalgeral">
+                    <div style="width:88%">
+                        <h3>Total Paciente</h3>
+                    </div>
+                    <div style="width:12%">
+                        <strong>R$ <%= parseFloat(item.totgeral).toLocaleString('pt-br', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                            }) %></strong>
+                    </div>
+                </div>
+                <!-- SUB TOTAL -->
+                <!-- TRASACOES -->
+                </div>
+            <% }); %>
+            <!-- EXTRATO -->
+            <!-- RESUMO -->
+            <div class="resumo">
+                <h2>Resumo Geral Faturamento por Convênio</h2>
+                <div class="totalizador">
+                    <div class="totalizador-valor">
+                        <strong>Total de Pacientes:</strong>
+                        <p><%= data.totalgeral.totpac.toLocaleString() %></p>
+                    </div>
+                </div>
+                <div class="totalizador">
+                    <div class="totalizador-valor">
+                        <strong>Total de Ch's:</strong>
+                        <p><%= parseFloat(data.totalgeral.totch).toLocaleString('pt-br', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                            }) %></p>
+                    </div>
+                </div>
+                <div class="totalizador">
+                    <div class="totalizador-valor">
+                        <strong>Total de Procedimentos:</strong>
+                        <p><%= data.totalgeral.totexa.toLocaleString() %></p>
+                    </div>
+                </div>
+                <div class="totalizador">
+                    <div class="totalizador-valor">
+                        <strong>Total Procedimentos Valor:</strong>
+                        <p>R$ <%= parseFloat(data.totalgeral.totgeral).toLocaleString('pt-br', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                        }) %></p>
+                    </div>
+                </div>
+                <div class="totalizador">
+                    <h4 style="padding-right: 10px;">TOTAL GERAL</h4>
+                    <div class="totalizador-valor">
+                        <strong>R$ <%= parseFloat(data.totalgeral.totgeral).toLocaleString('pt-br', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                        }) %></strong>
+                    </div>
+                </div>
+            </div>
+            <!-- RESUMO -->
+            <!-- ASSINATURAS -->
+            <div class="assinaturas">
+                <div class="nomes">
+                    <div class="assinaturalinha"></div>
+                    <strong>Resp. Faturamento</strong>
+                </div>
+                <div class="nomes">
+                    <div class="assinaturalinha"></div>
+                    <strong>Resp. Laboratório</strong>
+                </div>
+            </div>
+            <!-- ASSINATURAS -->
+        </div>
+    </body>
+</html>

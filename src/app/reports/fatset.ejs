@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <title>Estatística de Exames por Setor</title>
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
+        <meta charset="utf-8" />
+        <style>
+        /** BASICA **/
+        *, html {
+        padding:0;
+        margin:0;
+        }
+        html {
+        font-family: 'Lato', Arial, sans-serif;
+        }
+        @media screen {
+        body {
+        display:flex; flex-direction:column;
+        align-items: center;
+        background-color: #ccc;
+        }
+        #wrap {
+        background-color: #fff;
+        padding: 50px;
+        margin: 30px;
+        box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.25);
+        }
+        #loader{
+            background-color: orangered;
+        }
+        .loader-hide {
+            display:none;
+        }
+        .orientation-retrato{width: 60%;}
+        .orientation-paisagem{width: 80%;}
+        }
+        h1, h2, h3, h4{
+        font-weight: 900;
+        }
+        h1 {
+        font-size: 15px;
+        color: <%= color  %>;
+        }
+        h2 {
+        font-size: 15px;
+        color: <%= color  %>;
+        padding-top: 10px;
+        margin-top: 10px;
+        border-top: 1px solid <%= color  %>;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid <%= color  %>;
+        text-transform: uppercase;
+        }
+        h3 {
+        font-size: 12px;
+        color: <%= color  %>;
+        text-transform: uppercase;
+        }
+        strong {
+        font-weight: 700;
+        font-size: 12px;
+        color: #444;
+        }
+        p {
+        font-weight: 400;
+        font-size: 12px;
+        color: #444;
+        text-transform: capitalize;
+        }
+        .row {
+        display:flex;
+        flex-direction: row;
+        /* margin-bottom: 2px; */
+        }
+        /** HEADER **/
+        header{
+        display:flex;
+        flex-direction: row;
+        align-items:center;
+        margin-bottom: 20px;
+        }
+        header div:first-child{
+        flex:1
+        }
+        header h1 {
+        font-size: 18px;
+        text-transform: uppercase;
+        margin-bottom: 3px;
+        }
+        header strong {
+        margin-right: 3px;
+        }
+        header strong {
+        margin-bottom: 3px;
+        }
+        header p, header strong {
+        font-size:15px;
+        }
+        .logotipo {
+        padding-left:50px
+        }
+        .logotipo img{max-height: 40px;}
+        @media screen {
+            .logotipo img{max-height: 60px;}
+        }
+        /** CONTENT **/
+        .plano {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            border-left: 5px solid <%= color  %>;
+            padding: 15px;
+        }
+        .plano p, .plano strong {
+            font-size:14px;
+        }
+        .data {
+        padding-bottom: 20px;
+        }
+        .data-last-of-type {
+        padding-bottom: 20px;
+        }
+        .cabecalho {
+        display:flex;
+        align-items: center;
+        padding-bottom: 10px;
+        margin-bottom: 0px;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: #444;
+        }
+        .cabecalho h3 {
+        color: #444;
+        }
+        .trans {
+        display: flex;
+        align-items: center;
+        padding: 5px 0;
+        border-bottom: 1px dotted #ccc;
+        }
+        .trans-last-of-type {
+        padding: 5px 0;
+        border-bottom: 0;
+        margin-bottom: -10px;
+        }
+        .totalgeral {
+        display:flex;
+        align-items: center;
+        padding-top: 10px;
+        margin-top: 10px;
+        border-top-width: 1px;
+        border-top-style: dotted;
+        border-top-color: #ccc;
+        }
+        .totalgeral h3, .totalgeral p {
+        color: #444;
+        font-weight: 900;
+        }
+        .resumo {
+        padding-bottom: 30px;
+        }
+        .resumo h2 {
+        margin-bottom: 0;
+        }
+        .totalizador{
+        display: flex;
+        align-items: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: solid 1px #ccc;
+        }
+
+        .totalizador:last-child {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: solid 1px <%= color  %>;
+        }
+
+        .totalizador h4 {
+        font-size: 13px;
+        text-transform: uppercase;
+        color: <%= color  %>;
+        }
+
+        .totalizador-valor {
+        display: flex;
+        padding-left: 10px;
+        }
+
+        .totalizador-valor strong{
+        display: flex;
+        font-size: 13px;
+        padding-right: 5px;
+        }
+
+        .totalizador-valor p{
+        font-size: 13px;
+        }
+        </style>
+    </head>
+    <body>
+        <%if (size === 'retrato') { %>
+        <div id="wrap" class="orientation-retrato">
+        <% } else { %>
+        <div id="wrap" class="orientation-paisagem">
+        <% } %>
+            <!-- HEADER -->
+            <header>
+                <div>
+                    <h1>Estatística de Exames por Setor</h1>
+                    <p><strong>Período:</strong><%=start%> a <%=end%></p>
+                    <p class="emissao"><strong>Emissão:</strong><%=now%></p>
+                    <p class="operador"><strong>Operador:</strong><%=profile.nome%></p>
+                </div>
+                <%if (logo) { %>
+                    <div class="logotipo">
+                        <img src="<%= logo %>">
+                    </div>
+                <% } %>
+            </header>
+            <!-- HEADER -->
+            <!-- COMECO MAP POSTO -->
+            <% data.dados.forEach( (item,index,array) => {%>
+            <% if (index === (array.length -1)) { %>
+            <div class="data-last-of-type">
+            <% } else { %>
+            <div class="data">
+            <% } %>
+                <h2><%= item.posto %> | <%= item.descposto %></h2>
+                <% item.setores.forEach( (setor,index,array) => {%>
+                    <h2 style="margin-top:0;padding-top: 0;border-top: 0;">SETOR <%= setor.setor %></h2>
+                    <div class="row cabecalho">
+                        <div style="width: 52%;">
+                            <strong>Exame</strong>
+                        </div>
+                        <div style="width: 12%;text-align: center">
+                            <strong>AMB</strong>
+                        </div>
+                        <div style="width: 12%;text-align: center">
+                            <strong>Qtde. Exame</strong>
+                        </div>
+                        <div style="width: 12%;">
+                            <strong>Valor Exame</strong>
+                        </div>
+                        <div style="width: 12%;">
+                            <strong>Média</strong>
+                        </div>
+                    </div>
+                    <% setor.exames.forEach( (setor,index,array) => {%>
+                        <% setor.amb.forEach( (exame,index,array) => {%>
+                            <div class="row trans">
+                                <div style="width: 52%;">
+                                    <p><%= exame.descexame %></p>
+                                </div>
+                                <div style="width: 12%;text-align: center">
+                                    <p><%= exame.amb %></p>
+                                </div>
+                                <div style="width: 12%;text-align: center">
+                                    <p><%= parseFloat(exame.qtdexame).toLocaleString() %></p>
+                                </div>
+                                <div style="width: 12%;">
+                                    <p>R$ <%= parseFloat(exame.valexame).toLocaleString('pt-br', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                        }) %></p>
+                                </div>
+                                <div style="width: 12%;">
+                                    <p>R$ <%= parseFloat(exame.valconvenio).toLocaleString('pt-br', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                        }) %></p>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% }) %>
+                    <!-- SUB TOTAL -->
+                    <div class="row totalgeral" style="border-top: 0; margin-top: 0; margin-bottom: 30px;">
+                        <div style="width: 52%;">
+                            <h3>Total Geral <%= setor.setor %></h3>
+                        </div>
+                        <div style="width: 12%;text-align: center">
+                            <p>-</p>
+                        </div>
+                        <div style="width: 12%;text-align: center">
+                            <p><%= parseFloat(setor.totexa).toLocaleString() %></p>
+                        </div>
+                        <div style="width: 12%;">
+                            <p>R$ <%= parseFloat(setor.totvalexame).toLocaleString('pt-br', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                                }) %></p>
+                        </div>
+                        <div style="width: 12%;">
+                            <p>R$ <%= parseFloat(setor.totmedia).toLocaleString('pt-br', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                                }) %></p>
+                        </div>
+                    </div>
+                    <!-- SUB TOTAL -->
+                <% }) %>
+            </div>
+            <% }) %>
+            <!-- FIM MAP POSTO -->
+            <!-- RESUMO GERAL -->
+            <div class="resumo">
+                <h2>Total Geral Estatística de Exames por Setor</h2>
+                <div class="totalizador">
+                    <h4 style="padding-right: 10px;">RESUMO GERAL</h4>
+                    <div class="totalizador-valor">
+                        <strong>Total de Exames:</strong>
+                        <p><%= data.totalgeral.totexa.toLocaleString() %></p>
+                    </div>
+                    <div class="totalizador-valor">
+                        <strong>Valor Total Exames:</strong>
+                        <p><%= parseFloat(data.totalgeral.totvalexame).toLocaleString('pt-br', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                        }) %></p>
+                    </div>
+                    <div class="totalizador-valor">
+                        <strong>Total Média:</strong>
+                        <p><%= parseFloat(data.totalgeral.totmedia).toLocaleString('pt-br', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                        }) %></p>
+                    </div>
+                </div>
+            </div>
+            <!-- RESUMO GERAL -->
+        </div>
+    </body>
+</html>

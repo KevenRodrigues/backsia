@@ -1,0 +1,81 @@
+<style>
+    .header {
+        position: relative;
+    }
+
+    .header::after {
+        position: absolute;
+    }
+
+</style>
+
+<table
+    style="width:600px;font-family:'lato',Tahoma,sans-serif"
+    cellspacing="0"
+    cellpadding="0"
+    border="0"
+    align="center"
+>
+    <tr>
+        <td class="header" style="background: #fff">
+            <img
+                style="margin-top: 30px;
+                    margin-bottom: 30px;
+                    margin-left: 20px;
+                    max-width: 250px;
+                    max-height: 250px;"
+                src="{{logo}}"
+            >
+        </td>
+    </tr>
+    <tr>
+        <td style="padding: 30px;">
+            <p>
+                Prezado Cliente:
+                <b style="color: {{ primary }};">
+                    {{ username }}
+                </b>
+                tudo bem?
+            </p>
+            <p>
+                Confira abaixo o preparo para o seu exame
+            </p>
+            <div>
+                {{#each exames }}
+                    <div
+                        style="border-width: 1px;
+                            border-color: #8C8C8C;
+                            padding: 5px;
+                            border-radius: 6px;
+                            margin-top: 5px;
+                            "
+                    >
+                        <p>
+                            Preparo do Exame:
+                            <b style="color: {{ primary }};">
+                                {{ nomeexm }}
+                            </b>
+                        </p>
+                        <p style="white-space: pre-line;">
+                            {{ preparoexm }}
+                        </p>
+                    </div>
+                {{/each}}
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" style="background:{{ primary }};padding:30px;color:{{ tertiary }}">
+            <h3>
+                {{ infoLab }}
+            </h3>
+            <p>
+                <b>
+                    <a style="color: {{ tertiary }};" href="{{ urlLab }}">
+                        {{ urlLab }}
+                    </a>
+                </b>
+            </p>
+        </td>
+    </tr>
+</table>

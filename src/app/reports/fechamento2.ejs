@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <title>Fechamento de Caixa Análitico</title>
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
+        <meta charset="utf-8" />
+        <style>
+        /** BASICA **/
+        *, html {
+        padding:0;
+        margin:0;
+        }
+        html {
+        font-family: 'Lato', Arial, sans-serif;
+        }
+        @media screen {
+        body {
+        display:flex; flex-direction:column;
+        align-items: center;
+        background-color: #ccc;
+        }
+        #wrap {
+        background-color: #fff;
+        padding: 50px;
+        margin: 30px;
+        box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.25);
+        }
+        #loader{
+            background-color: orangered;
+        }
+        .loader-hide {
+            display:none;
+        }
+        .orientation-retrato{width: 60%;}
+        .orientation-paisagem{width: 80%;}
+        }
+        h1, h2, h3, h4{
+        font-weight: 900;
+        }
+        h1 {
+        font-size: 15px;
+        color: <%= color  %>;
+        }
+        h2 {
+        font-size: 15px;
+        color: <%= color  %>;
+        padding-top: 10px;
+        margin-top: 10px;
+        border-top: 1px solid <%= color  %>;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid <%= color  %>;
+        }
+        h3 {
+        font-size: 12px;
+        color: <%= color  %>;
+        padding-top: 10px;
+        margin-top: 10px;
+        border-top: 1px solid <%= color  %>;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid <%= color  %>;
+        }
+        strong {
+        font-weight: 700;
+        font-size: 12px;
+        color: #444;
+        }
+        p {
+        font-weight: 400;
+        font-size: 12px;
+        color: #444;
+        text-transform: capitalize;
+        }
+        .row {
+        display:flex;
+        flex-direction: row;
+        /* margin-bottom: 2px; */
+        }
+        /** HEADER **/
+        header{
+        display:flex;
+        flex-direction: row;
+        align-items:center;
+        margin-bottom: 20px;
+        }
+        header div:first-child{
+        flex:1
+        }
+        header h1 {
+        font-size: 18px;
+        text-transform: uppercase;
+        margin-bottom: 3px;
+        }
+        header strong {
+        margin-right: 3px;
+        }
+        header strong {
+        margin-bottom: 3px;
+        }
+        header p, header strong {
+        font-size:15px;
+        }
+        .logotipo {
+        padding-left:50px
+        }
+        .logotipo img{max-height: 40px;}
+        @media screen {
+            .logotipo img{max-height: 60px;}
+        }
+        /** CONTENT **/
+        .curpaciente {
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: #ccc;
+        }
+        .curpaciente-last-of-type {
+        padding-bottom: 30px;
+        }
+        .exames {
+        padding-top: 10px;
+        margin-top: 10px;
+        border-top-width: 1px;
+        border-top-style: dotted;
+        border-top-color: #ccc;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-bottom-width: 1px;
+        border-bottom-style: dotted;
+        border-bottom-color: #ccc;
+        }
+        .resumo {
+        padding-bottom: 30px;
+        }
+        .resumo h2 {
+        margin-bottom: 0;
+        }
+        .totalizador{
+        display: flex;
+        align-items: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: solid 1px #ccc;
+        }
+
+        .totalizador:last-child {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: solid 1px <%= color  %>;
+        }
+
+        .totalizador h4 {
+        font-size: 13px;
+        text-transform: uppercase;
+        color: <%= color  %>;
+        }
+
+        .totalizador-valor {
+        display: flex;
+        padding-left: 10px;
+        }
+
+        .totalizador-valor strong{
+        display: flex;
+        font-size: 13px;
+        padding-right: 5px;
+        }
+
+        .totalizador-valor p{
+        font-size: 13px;
+        }
+        .cheques {
+        padding-bottom: 30px;
+        }
+        </style>
+    </head>
+    <body>
+        <%if (size === 'retrato') { %>
+        <div id="wrap" class="orientation-retrato">
+        <% } else { %>
+        <div id="wrap" class="orientation-paisagem">
+        <% } %>
+            <header>
+                <div>
+                    <h1>Fechamento de Caixa Análitico</h1>
+                    <p><strong>Período:</strong><%=start%> a <%=end%></p>
+                    <p class="emissao"><strong>Emissão:</strong><%=now%></p>
+                    <p class="operador"><strong>Operador:</strong><%=profile.nome%></p>
+                </div>
+                <%if (logo) { %>
+                    <div class="logotipo">
+                        <img src="<%= logo %>">
+                    </div>
+                <% } %>
+            </header>
+            <!-- HTML -->
+            <!-- PACIENTES -->
+        <% data.curpaciente.forEach((pac,index, array) => {%>
+            <!-- PAC -->
+            <% if (index === (array.length -1)) { %>
+            <div class="curpaciente-last-of-type">
+            <% } else { %>
+            <div class="curpaciente">
+            <% } %>
+            <div class="row">
+                <div style="width: 20%">
+                    <strong>Amostra</strong>
+                    <p>
+                    <%=pac.posto%> - <%=pac.amostra%>
+                    </p>
+                </div>
+                <div style="width: 80%"">
+                    <strong>Paciente</strong>
+                    <p><%= pac.prontuario.nome.trim() %></p>
+                </div>
+            </div>
+            <div class="row">
+                <div style="width: 15%">
+                    <strong>Tot. a Pagar</strong>
+                    <p>
+                    <%=pac.totpag%>
+                    </p>
+                </div>
+                <div style="width: 10%">
+                    <strong>Acres. %</strong>
+                    <p>
+                    <%=pac.acresperc%>
+                    </p>
+                </div>
+                <div style="width: 10%">
+                    <strong>Acres. R$</strong>
+                    <p>
+                    <%=pac.acresval%>
+                    </p>
+                </div>
+                <div style="width: 10%">
+                    <strong>Desc. %</strong>
+                    <p>
+                    <%=pac.descperc%>
+                    </p>
+                </div>
+                <div style="width: 10%">
+                    <strong>Desc. R$</strong>
+                    <p>
+                    <%=pac.descval%>
+                    </p>
+                </div>
+                <div style="width: 15%">
+                    <strong>Tot. a Receber</strong>
+                    <p>
+                    <%=pac.totalpaci%>
+                    </p>
+                </div>
+                <div style="width: 15%">
+                    <strong>Tot. Recebido</strong>
+                    <p>
+                    <%=pac.totrec%>
+                    </p>
+                </div>
+                <div style="width: 15%">
+                    <strong>Diferença</strong>
+                    <p style="<%= pac.diferenca < 0  ? 'color: red;font-weight:900' : null %>">
+                    <%=pac.diferenca%>
+                    </p>
+                </div>
+            </div>
+            <!-- MOVEXA -->
+            <div class="row exames">
+                <strong style="margin-right: 5px">Exames:</strong>
+                <p>
+                    <% pac.movexa.forEach( exa => {%>
+                        <%= exa.exame.codigo %> |
+                    <%  });%>
+                </p>
+            </div>
+            <!-- MOVEXA -->
+            <!-- MOVCAI -->
+            <div class="row">
+                <div style="width:35%">
+                    <strong>Pagamento</strong>
+                </div>
+                <div style="width:15%">
+                    <strong>Vencimento</strong>
+                </div>
+                <div style="width:30%">
+                    <strong>Operador</strong>
+                </div>
+                <div style="width:10%">
+                    <strong>Diferença</strong>
+                </div>
+                <div style="width:10%">
+                    <strong>Caixa</strong>
+                </div>
+            </div>
+            <% pac.movcai.forEach( mov => {%>
+            <div class="row">
+                <div style="width:35%">
+                    <p><%= mov.descricao.trim()  %></p>
+                </div>
+                <div style="width:15%">
+                    <p><%= mov.dtvenc  %></p>
+                </div>
+                <div style="width:30%">
+                    <p><%= mov.operador.nome  %></p>
+                </div>
+                <div style="width:10%">
+                    <p><%= mov.diferenca  %></p>
+                </div>
+                <div style="width:10%">
+                    <p><%= mov.id  %></p>
+                </div>
+            </div>
+            <%  });%>
+            <!-- MOVCAI END -->
+            </div>
+            <%  });%>
+            <!-- PACIENTES -->
+            <!-- HTML -->
+            <div class="resumo">
+                <h2>Resumo Geral Fechamento de Caixa Analítico por Posto</h2>
+                <div class="totalizador">
+                    <h4>Caixa</h4>
+                    <div class="totalizador-valor">
+                        <strong>Saldo Inicial</strong>
+                        <p>R$ <%=data.fimcai.valini.toFixed(2)%></p>
+                    </div>
+                    <div class="totalizador-valor">
+                        <strong>Valor Apurado</strong>
+                        <p>R$ <%=data.fimcai.totvalpag.toFixed(2)%></p>
+                    </div>
+                </div>
+                <div class="totalizador">
+                    <h4>Resumo</h4>
+                    <div class="totalizador-valor">
+                        <strong>Entradas</strong>
+                        <p>R$ <%=parseFloat(data.fimcai.entrada).toFixed(2)%></p>
+                    </div>
+                    <div class="totalizador-valor">
+                        <strong>Saídas</strong>
+                        <p>R$ <%=parseFloat(data.fimcai.saida).toFixed(2)%></p>
+                    </div>
+                    <div class="totalizador-valor">
+                        <strong>Exames</strong>
+                        <p>R$ <%=parseFloat(data.fimcai.totvalpag).toFixed(2)%></p>
+                    </div>
+                    <div class="totalizador-valor">
+                        <strong>Total</strong>
+                        <p>R$ <%=
+                            (
+                            parseFloat(data.fimcai.entrada) -
+                            parseFloat(data.fimcai.saida) +
+                            parseFloat(data.fimcai.totvalpag)
+                            ).toFixed(2)
+                        %></p>
+                    </div>
+                </div>
+                <div class="totalizador">
+                    <h4>A vista</h4>
+                    <div class="totalizador-valor">
+                        <strong>Dinheiro</strong>
+                        <p>R$ <%=parseFloat(data.fimcai.dinheiro).toFixed(2)%></p>
+                    </div>
+                    <div class="totalizador-valor">
+                        <strong>Cheque a vista</strong>
+                        <p>R$ <%=parseFloat(data.fimcai.ch_vista).toFixed(2)%></p>
+                    </div>
+                </div>
+                <div class="totalizador">
+                    <h4>A Prazo</h4>
+                    <div class="totalizador-valor">
+                        <strong>Cartão Déb.</strong>
+                        <p>R$ <%=parseFloat(data.fimcai.ct_deb).toFixed(2)%></p>
+                    </div>
+                    <div class="totalizador-valor">
+                        <strong>Cartão Créd.</strong>
+                        <p>R$ <%=parseFloat(data.fimcai.ct_cred).toFixed(2)%></p>
+                    </div>
+                    <div class="totalizador-valor">
+                        <strong>Ch. Prazo</strong>
+                        <p>R$ <%=parseFloat(data.fimcai.ch_prazo).toFixed(2)%></p>
+                    </div>
+                    <div class="totalizador-valor">
+                        <strong>Outros</strong>
+                        <p>R$ <%=parseFloat(data.fimcai.outros).toFixed(2)%></p>
+                    </div>
+                </div>
+              </div>
+              <%if (data.relcheques.length> 0) { %>
+              <div class="cheques">
+                <h2>Relação de Cheques</h2>
+                <div class="row">
+                    <div style="width:20%"><strong>Paciente</strong></div>
+                    <div style="width:40%"><strong>Descrição</strong></div>
+                    <div style="width:20%"><strong>No. Cheque</strong></div>
+                    <div style="width:20%"><strong>Valor R$</strong></div>
+                </div>
+                <% data.relcheques.forEach( cheque => {%>
+                    <div class="row">
+                        <div style="width:20%"><p><%=cheque.posto%> - <%=cheque.amostra%></p></div>
+                        <div style="width:40%"><p><%=cheque.descricao.trim()%></p></div>
+                        <div style="width:20%"><p><%=cheque.numero%></p></div>
+                        <div style="width:20%"><p><%=cheque.valpag%></p></div>
+                    </div>
+                <%  });%>
+              </div>
+              <% } %>
+              <%if (data.reldespesas.length> 0) { %>
+              <div class="despesas">
+                <h2>Relação de Despesas</h2>
+                <div class="row">
+                    <div style="width:15%"><strong>Caixa</strong></div>
+                    <div style="width:15%"><strong>Valor</strong></div>
+                    <div style="width:70%"><strong>Observação</strong></div>
+                </div>
+                <% data.reldespesas.forEach( despesa => {%>
+                    <div class="row">
+                        <div style="width:15%"><p><%=despesa.caixa_id%></p></div>
+                        <div style="width:15%"><p><%=despesa.valfor%></p></div>
+                        <div style="width:70%"><p><%=despesa.obscai.trim()%></p></div>
+                    </div>
+                <%  });%>
+              </div>
+              <% } %>
+        </div>
+    </body>
+</html>

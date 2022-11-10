@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Estatísticas de Entrega</title>
+		<link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
+		<meta charset="utf-8" />
+		<style>
+			/** BASICA **/
+			*, html {
+				padding:0;
+				margin:0;
+			}
+			html {
+				font-family: 'Lato', Arial, sans-serif;
+			}
+			@media screen {
+				body {
+					display:flex; flex-direction:column;
+					align-items: center;
+					background-color: #ccc;
+				}
+				#wrap {
+					background-color: #fff;
+					padding: 50px;
+					margin: 30px;
+					box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.25);
+				}
+				.orientation-retrato{width: 60%;}
+				.orientation-paisagem{width: 80%;}
+			}
+			h1{
+				font-weight: 900;
+				color: <%= color  %>;
+			}
+
+			strong {
+				font-weight: 700;
+				font-size: 12px;
+				color: #444;
+			}
+			p {
+				font-weight: 400;
+				font-size: 12px;
+				color: #444;
+				text-transform: capitalize;
+			}
+			.row {
+				display:flex;
+			}
+			.column {
+				display:flex;
+				flex-direction: column;
+			}
+			/** HEADER **/
+			header{
+				display:flex;
+				align-items:center;
+				margin-bottom: 20px;
+			}
+			header div:first-child{
+				flex:1
+			}
+			header h1 {
+				font-size: 18px;
+				text-transform: uppercase;
+				margin-bottom: 3px;
+			}
+			header strong {
+				margin-right: 3px;
+				margin-bottom: 3px;
+			}
+			header p, header strong {
+				font-size:15px;
+			}
+			.logotipo {
+				padding-left:50px
+			}
+			.logotipo img{max-height: 40px;}
+			@media screen {
+				.logotipo img{max-height: 60px;}
+			}
+			/* CONTENT */
+			@page {
+				margin: 2cm;
+			}
+			.container {
+				width: 100%;
+			}
+
+			.c-table-coleta,
+			.c-table-resumo-geral,
+            .c-table-resumo-do-dia {
+				width: 100%;
+				border-collapse: collapse;
+			}
+
+            .c-table-resumo-geral {
+                font-weight: 700;
+            }
+
+			caption {
+				font-weight: 900;
+				margin: 15px 0;
+				font-size: 15px;
+				text-align: left;
+			}
+
+			th, td {
+				text-align: center;
+				padding: 5px 10px;
+			}
+
+            table tr:nth-child(even) {
+                background-color: lightgrey;
+            }
+
+			th {
+				margin-bottom: 10px;
+                background-color: <%= color %>;
+                color: #fff;
+			}
+
+			td {
+				font-size: 12px;
+			}
+
+			@media print {
+				td {
+					font-size: 8px;
+				}
+				caption {
+					font-size: 12px;
+				}
+
+				th {
+					font-size: 10px;
+				}
+			}
+
+			.c-main__h3 {
+				color: <%= color  %>;
+				margin: 25px auto;
+			}
+			.c-table-resumo-do-dia {
+				margin-bottom: 10px;
+			}
+			.c-table-coleta th,
+            .c-table-resumo-geral td,
+            .c-table-resumo-geral th,
+            .c-table-resumo-do-dia th,
+            .c-table-resumo-do-dia td,
+			.c-table-coleta td {
+				font-size: 12px;
+				width: 20%;
+			}
+
+			.c-table-coleta th {
+				font-size: 12px;
+			}
+
+			.c-main__h4 {
+				margin: 10px;
+			}
+
+			.c-table-resumo-geral th, td {
+				font-size: 12px;
+			}
+
+			.c-table-resumo-geral {
+				margin-top: 25px;
+			}
+
+		</style>
+	</head>
+
+	<body>
+		<div id="wrap" class="orientation-retrato page">
+			<!-- HEADER -->
+			<header>
+				<div>
+					<h1>Estatísticas de Entrega - Relatório: Por Data</h1>
+					<p><strong>Período:</strong><%=start%> a <%=end%></p>
+					<p class="emissao"><strong>Emissão:</strong><%=now%></p>
+					<p class="emissao"><strong>Operador:</strong><%=profile.nome%></p>
+					<p class="emissao"><strong>Parte:</strong><%=data.parte%></p>
+				</div>
+                <%if (logo) { %>
+                    <div class="logotipo">
+                        <img src="<%= logo %>">
+                    </div>
+                <% } %>
+			</header>
+			<main>
+				<% data.registros.dadosDePostoExame.forEach(dataColeta => {%>
+					<h3 class="c-main__h3">Data de Coleta: <%= dataColeta.data %></h3>
+					<% dataColeta.postos.forEach(posto => {%>
+						<table class="c-table-coleta">
+                        <caption>Posto: <%=posto.codigo%> <%=posto.nome%></caption>
+						<thead>
+							<tr>
+								<th>Data Coleta</th>
+								<th>Codigo</th>
+								<th>Descrição</th>
+								<th>Exames</th>
+								<th>Pacientes</th>
+							</tr>
+						</thead>
+						<tbody>
+							<% posto.exames.forEach(exame => {%>
+								<tr>
+									<td><%= exame.dataDeColeta  %> </td>
+									<td><%= exame.codigo  %></td>
+									<td><%= exame.descricao  %></td>
+									<td><%= exame.quantidade  %></td>
+									<td><%= exame.quantidadePacientes  %></td>
+								</tr>
+							<% }) %>
+							<tr>
+								<td></td>
+								<td></td>
+								<td>Total: </td>
+								<td><%= posto.totalDeExames%></td>
+								<td><%= posto.totalDePacientes%></td>
+							</tr>
+						</tbody>
+					</table>
+					<%}) %>
+					<table class="c-table-resumo-do-dia">
+						<thead>
+                            <tr>
+                                <th>Resumo do dia: </th>
+                                <th><%= dataColeta.data %> </th>
+                                <th>Total: </th>
+                                <th><%= dataColeta.totalDeExamesDoDia  %> </th>
+                                <th><%= dataColeta.totalDePacientesDoDia  %> </th>
+                            </tr>
+                        </thead>
+					</table>
+				<% }) %>
+            <% if (data.ehAUltimaParte === '1') {%>
+				<table class="c-table-resumo-geral">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Exames</th>
+                            <th>Pacientes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <td></td>
+                        <td>Resumo Geral da Estatística</td>
+                        <td>Totais Gerais:</td>
+                        <td><%= data.registros.totalDeExamesGeral %> </td>
+                        <td><%= data.registros.totalDePacientesGeral %> </td>
+                    </tbody>
+				</table>
+            <%}%>
+			</main>
+	</body>
+
+</html>

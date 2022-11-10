@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Estatística de Postos de Coleta Por Data</title>
+		<link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
+		<meta charset="utf-8" />
+		<style>
+			/** BASICA **/
+			*, html {
+				padding:0;
+				margin:0;
+			}
+			html {
+				font-family: 'Lato', Arial, sans-serif;
+			}
+			@media screen {
+				body {
+					display:flex; flex-direction:column;
+					align-items: center;
+					background-color: #ccc;
+				}
+				#wrap {
+					background-color: #fff;
+					padding: 50px;
+					margin: 30px;
+					box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.25);
+				}
+				.orientation-retrato{width: 60%;}
+				.orientation-paisagem{width: 80%;}
+			}
+			h1{
+				font-weight: 900;
+				color: <%= color  %>;
+			}
+
+			strong {
+				font-weight: 700;
+				font-size: 12px;
+				color: #444;
+			}
+			p {
+				font-weight: 400;
+				font-size: 12px;
+				color: #444;
+				text-transform: capitalize;
+			}
+			.row {
+				display:flex;
+			}
+			.column {
+				display:flex;
+				flex-direction: column;
+			}
+			/** HEADER **/
+			header{
+				display:flex;
+				align-items:center;
+				margin-bottom: 20px;
+			}
+			header div:first-child{
+				flex:1
+			}
+			header h1 {
+				font-size: 18px;
+				text-transform: uppercase;
+				margin-bottom: 3px;
+			}
+			header strong {
+				margin-right: 3px;
+				margin-bottom: 3px;
+			}
+			header p, header strong {
+				font-size:15px;
+			}
+			.logotipo {
+				padding-left:50px
+			}
+			.logotipo img{max-height: 40px;}
+			@media screen {
+				.logotipo img{max-height: 60px;}
+			}
+			/* CONTENT */
+			@page {
+				margin: 2cm;
+			}
+			.container {
+				width: 100%;
+			}
+
+			.c-table-coleta,
+			.c-table-resumo-geral,
+            .c-table-resumo-do-dia {
+				width: 100%;
+				border-collapse: collapse;
+			}
+
+			.c-table-resumo-geral {
+                width: 100%;
+			}
+
+			.c-caption {
+				font-weight: 900;
+				margin: 15px 0;
+				font-size: 15px;
+				text-align: left;
+			}
+
+			th, td {
+				text-align: center;
+				padding: 5px 10px;
+			}
+
+			.c-table-resumo-do-dia td,
+            .c-table-resumo-geral th,
+            .c-table-resumo-do-dia strong,
+            .c-table-coleta th {
+				margin-bottom: 10px;
+                color: #fff;
+                background-color: <%= color %>;
+			}
+
+			td {
+				font-size: 12px;
+			}
+
+            table tr:nth-child(even) {
+                background-color: lightgrey;
+            }
+
+			@media print {
+				td {
+					font-size: 8px;
+				}
+				caption {
+					font-size: 12px;
+				}
+
+				th {
+					font-size: 10px;
+				}
+			}
+
+			.c-main__h3 {
+				color: <%= color  %>;
+				margin: 25px auto;
+			}
+			.c-table-resumo-do-dia {
+				margin-bottom: 10px;
+			}
+			.c-table-resumo-do-dia th, td {
+				width: 16%;
+			}
+
+			.c-table-coleta th {
+				font-size: 12px;
+			}
+
+			.c-main__h4 {
+				margin: 10px;
+			}
+
+			.c-table-resumo-geral th, td {
+				font-size: 12px;
+			}
+
+		</style>
+	</head>
+
+	<body>
+		<%
+				const formatter = new Intl.NumberFormat('pt-BR', {
+					style: 'currency',
+					currency: 'BRL',
+					});
+			%>
+		<div id="wrap" class="orientation-retrato page">
+			<!-- HEADER -->
+			<header>
+				<div>
+					<h1>Estatística de Postos de Coleta - Relatório: Por Data</h1>
+					<p><strong>Período:</strong><%=start%> a <%=end%></p>
+					<p class="emissao"><strong>Emissão:</strong><%=now%></p>
+					<p class="emissao"><strong>Operador:</strong><%=profile.nome%></p>
+                    <p class="emissao"><strong>Parte:</strong><%= data.parte%></p>
+				</div>
+                <div class="logotipo">
+                    <img src=<%=logo%> alt="logo">
+                </div>
+			</header>
+            <main>
+				<%data.registros.forEach(dado => {%>
+					<h3 class="c-main__h3"><%=data.tipoDeData%>: <%= dado.dtcoleta %></h3>
+					<%dado.coletas.forEach(coleta => {%>
+						<table class="c-table-coleta">
+                            <caption class="c-caption">Posto: <%=coleta.codigoPosto%> <%=coleta.posto%></caption>
+							<thead>
+								<tr>
+									<th><b><%=data.tipoDeData%></b></th>
+									<th><b>Código</b></th>
+									<th><b>Convênio</b></th>
+									<th><b>Total Pacientes</b></th>
+									<th><b>Total Exames</b></th>
+									<th><b>Total Convênios</b></th>
+								</tr>
+							</thead>
+							<tbody>
+								<% coleta.itens.forEach(item => {%>
+									<tr>
+										<td><%=dado.dtcoleta %> </td>
+										<td><%= item.convenio_id%> </td>
+										<td><%= item.descconv %> </td>
+										<td><%= item.totpac %></td>
+										<td><%= item.totexa %></td>
+										<td>
+											<%
+											const totalConvenios =
+											formatter.format(Number(item.totval));
+											%>
+											<%= totalConvenios %>
+										</td>
+									</tr>
+								<%})%>
+								<tr>
+										<td></td>
+										<td></td>
+										<td>
+											<strong>
+												Totais Gerais
+											</strong>
+										</td>
+										<td><%= coleta.totaisGerais.totalDePacientes%></td>
+										<td><%= coleta.totaisGerais.totalDeExames %></td>
+										<td>
+											<%
+											const totaisGeraisConvenios =
+											formatter.format(Number(coleta.totaisGerais.totalDeConvenios));
+											%>
+											<%= totaisGeraisConvenios%>
+										</td>
+									</td>
+								</tr>
+
+							</tbody>
+						</table>
+						<%})%>
+					</main>
+					<table class="c-table-resumo-do-dia">
+						<tbody>
+							<tr>
+								<td></td>
+								<td><strong>Resumo do Dia:  </strong></td>
+								<td>
+									<strong>
+										<%= dado.dtcoleta %>
+									</strong>
+								</td>
+								<td><%= dado.resumoDoDia.resumoDePacientes %> </td>
+								<td><%= dado.resumoDoDia.resumoDeExames %> </td>
+								<td>
+									<%
+										const resumoGeralConvenios =
+											formatter.format(Number(dado.resumoDoDia.resumoDeConvenios.toFixed(2)));
+									%>
+									<%= resumoGeralConvenios %>
+								 </td>
+							</tr>
+						</tbody>
+					</table>
+				<%})%>
+            </main>
+			<% if (data.ehAUltimaParte === '1') { %>
+                <table class="c-table-resumo-geral">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Pacientes</th>
+                            <th>Exames</th>
+                            <th>Convênios</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <b>Resumo Geral da Estatística:</b>
+                            </td>
+                            <td>
+                                <strong>Totais Gerais:</strong>
+                            </td>
+                            <td></td>
+                            <td><%= data.totais.resumoGeralPacientes %> </td>
+                            <td><%= data.totais.resumoGeralExames %> </td>
+                            <td>
+                                <%
+                                    const resumoGeralConvenios =
+                                        formatter.format(Number(data.totais.resumoGeralConvenios.toFixed(2)));
+                                %>
+                                <%= resumoGeralConvenios %>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            <%}%>
+	</body>
+
+</html>

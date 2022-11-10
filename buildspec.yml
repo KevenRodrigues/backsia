@@ -1,0 +1,25 @@
+# Do not change version. This is the version of aws buildspec, not the version of your buldspec file.
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR ...
+      - aws --version
+      - aws ecr get-login-password --region sa-east-1 | docker login --username AWS --password-stdin 556587145237.dkr.ecr.sa-east-1.amazonaws.com
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t sialabbackendeasylab .
+      - docker tag sialabbackendeasylab:latest 556587145237.dkr.ecr.sa-east-1.amazonaws.com/sialabbackendeasylab:latest
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
+      - docker push 556587145237.dkr.ecr.sa-east-1.amazonaws.com/sialabbackendeasylab:latest
+      - echo Writing image definitions file...
+      - printf '[{"name":"sialabbackendeasylab","imageUri":"%s"}]' 556587145237.dkr.ecr.sa-east-1.amazonaws.com/sialabbackendeasylab:latest > imagedefinitions.json
+      - cat imagedefinitions.json
+artifacts:
+  files:
+    - imagedefinitions.json

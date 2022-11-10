@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Estatística de Conferência por Operador</title>
+		<link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
+		<meta charset="utf-8" />
+		<style>
+				/** BASICA **/
+				*, html {
+				padding:0;
+				margin:0;
+			}
+			html {
+				font-family: 'Lato', Arial, sans-serif;
+			}
+			@media screen {
+				body {
+					display:flex; flex-direction:column;
+					align-items: center;
+					background-color: #ccc;
+				}
+				#wrap {
+					background-color: #fff;
+					padding: 50px;
+					margin: 30px;
+					box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.25);
+				}
+				.orientation-retrato{width: 60%;}
+				.orientation-paisagem{width: 80%;}
+			}
+			h1{
+				font-weight: 900;
+				color: <%= color  %>;
+			}
+
+			strong {
+				font-weight: 700;
+				font-size: 12px;
+				color: #444;
+			}
+			p {
+				font-weight: 400;
+				font-size: 12px;
+				color: #444;
+				text-transform: capitalize;
+			}
+			.row {
+				display:flex;
+			}
+			.column {
+				display:flex;
+				flex-direction: column;
+			}
+			/** HEADER **/
+			header{
+				display:flex;
+				align-items:center;
+				margin-bottom: 20px;
+			}
+			header div:first-child{
+				flex:1
+			}
+			header h1 {
+				font-size: 18px;
+				text-transform: uppercase;
+				margin-bottom: 3px;
+			}
+			header strong {
+				margin-right: 3px;
+				margin-bottom: 3px;
+			}
+			header p, header strong {
+				font-size:15px;
+			}
+			.logotipo {
+				padding-left:50px
+			}
+			.logotipo img{max-height: 40px;}
+			@media screen {
+				.logotipo img{max-height: 60px;}
+			}
+			/* CONTENT */
+			@page {
+				margin: 2cm;
+			}
+			.container {
+				width: 100%;
+			}
+
+			.c-table,
+			.c-table-resumo-geral {
+				width: 100%;
+                border-collapse: collapse;
+			}
+
+            .c-table-resumo-do-dia {
+                margin-top: 10px;
+            }
+
+            .c-table-resumo-geral {
+                font-weight: 700;
+            }
+
+			caption {
+				font-weight: 900;
+				margin: 15px 0;
+				font-size: 15px;
+                text-align: left;
+			}
+
+			 th {
+				text-align: center;
+				padding: 5px 1px;
+			}
+			td {
+				text-align: center;
+				padding: 5px 1px;
+			}
+
+			th {
+				margin-bottom: 10px;
+			}
+
+			td {
+				font-size: 8px;
+			}
+
+			.c-table-resumo-geral {
+				margin-top: 20px;
+			}
+
+			.c-table th,
+			.c-table td,
+            .c-table-resumo-geral th {
+				font-size: 10px;
+			}
+
+			th {
+				background-color: <%= color %>;
+				color: white;
+			}
+
+			.c-table-resumo-geral th, td {
+				font-size: 12px;
+			}
+
+			tr:nth-child(even) {
+				background-color: lightgrey;
+			}
+
+			.c-div {
+				display: flex;
+                flex-direction: column;
+                margin: 10px 0;
+			}
+
+            .c-div h4 {
+                font-weight: 900;
+                font-size: 14px;
+            }
+
+            .c-main__h3 {
+				color: <%= color  %>;
+				margin: 25px auto;
+			}
+
+			.c-p {
+				padding: 5px 0;
+				font-size: 12px;
+				background-color: white;
+			}
+
+			.c-p b {
+				color: <%= color  %>;
+			}
+
+            .c-table th,
+			.c-table th,
+			td, th {
+				width: 12.5%;
+			}
+
+
+		</style>
+	</head>
+
+	<body>
+        <div id="wrap" class="orientation-retrato page">
+            <header>
+                <div>
+                    <h1>Estatística de Conferência por Operador</h1>
+                    <h1>Relatório: Analítico</h1>
+                    <p><strong>Período:</strong><%=start%> a <%=end%></p>
+                    <p class="emissao"><strong>Emissão:</strong><%=now%></p>
+                    <p><strong>Operador:</strong><%= profile.nome  %></p>
+                    <p><strong>Parte:</strong><%= data.parte %></p>
+                </div>
+                <div class="logotipo">
+                    <img src=<%=logo %> alt="logotipo">
+                </div>
+            </header>
+            <% for (operador of data.registros) {%>
+                <h3 class="c-main__h3">Usuário que fez a Conferência: <%=operador.nome%></h3>
+                <% for (const convenio of operador.convenios) {%>
+                    <div class="c-div">
+                        <h4>Convênio + Código: <%=convenio.codigo%> - <%=convenio.fantasia%></h4>
+                        <h4> Plano: <%=convenio.plano%></h4>
+                    </div>
+                    <table class="c-table">
+                        <thead>
+                            <tr>
+                                <th>Posto</th>
+                                <th>Amostra</th>
+                                <th>Exame</th>
+                                <th>Número Guia</th>
+                                <th>Data Conferência</th>
+                                <th>Hora Conferência</th>
+                                <th>Lote Faturamento</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (const exame of convenio.exames) {%>
+                                <tr>
+                                    <td><%=exame.posto%></td>
+                                    <td><%=exame.amostra%></td>
+                                    <td><%=exame.exmcod%></td>
+                                    <td><%=exame.requisicao%></td>
+                                    <td><%=exame.dtconfop%></td>
+                                    <td><%=exame.hrconfop%></td>
+                                    <td><%=exame.lotefat_id%></td>
+                                </tr>
+                            <%}%>
+                        </tbody>
+                    </table>
+                <%}%>
+                <table class="c-table-resumo-geral">
+                    <thead>
+                        <tr>
+                            <th>Resumo do Operador</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Conferidos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Total: </td>
+                            <td><%=operador.total%></td>
+                        </tr>
+                    </tbody>
+                </table>
+            <%}%>
+            <% if (data.ehAUltimaParte === '1') {%>
+                <table class="c-table-resumo-geral">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Conferidos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Resumo Geral da Estatística</td>
+                            <td></td>
+                            <td></td>
+                            <td>Total de Geral: </td>
+                            <td><%=data.total%></td>
+                        </tr>
+                    </tbody>
+                </table>
+            <%}%>
+        </div>
+        </body>
+
+</html>

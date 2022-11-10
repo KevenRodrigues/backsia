@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Estatística de Avançada</title>
+		<link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
+		<meta charset="utf-8" />
+		<style>
+				/** BASICA **/
+				*, html {
+				padding:0;
+				margin:0;
+			}
+			html {
+				font-family: 'Lato', Arial, sans-serif;
+			}
+			@media screen {
+				body {
+					display:flex; flex-direction:column;
+					align-items: center;
+					background-color: #ccc;
+				}
+				#wrap {
+					background-color: #fff;
+					padding: 50px;
+					margin: 30px;
+					box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.25);
+				}
+				.orientation-retrato{width: 60%;}
+				.orientation-paisagem{width: 80%;}
+			}
+			h1{
+				font-weight: 900;
+				color: <%= color  %>;
+			}
+
+			strong {
+				font-weight: 700;
+				font-size: 12px;
+				color: #444;
+			}
+			p {
+				font-weight: 400;
+				font-size: 12px;
+				color: #444;
+				text-transform: capitalize;
+			}
+			.row {
+				display:flex;
+			}
+			.column {
+				display:flex;
+				flex-direction: column;
+			}
+			/** HEADER **/
+			header{
+				display:flex;
+				align-items:center;
+				margin-bottom: 20px;
+			}
+			header div:first-child{
+				flex:1
+			}
+			header h1 {
+				font-size: 18px;
+				text-transform: uppercase;
+				margin-bottom: 3px;
+			}
+			header strong {
+				margin-right: 3px;
+				margin-bottom: 3px;
+			}
+			header p, header strong {
+				font-size:15px;
+			}
+			.logotipo {
+				padding-left:50px
+			}
+			.logotipo img{max-height: 40px;}
+			@media screen {
+				.logotipo img{max-height: 60px;}
+			}
+			/* CONTENT */
+			@page {
+				margin: 2cm;
+			}
+			.container {
+				width: 100%;
+			}
+
+			.c-table,
+			.c-table-resumo-geral {
+				width: 100%;
+                border-collapse: collapse;
+			}
+
+            .c-table-resumo-geral {
+                font-weight: 700;
+            }
+
+			caption {
+				font-weight: 900;
+				margin: 15px 0;
+				font-size: 15px;
+                text-align: left;
+			}
+
+			 th {
+				text-align: center;
+				padding: 5px 1px;
+			}
+			td {
+				text-align: center;
+				padding: 5px 1px;
+			}
+
+			th {
+				margin-bottom: 10px;
+			}
+
+			td {
+				font-size: 8px;
+			}
+
+			@media print {
+				td {
+					font-size: 4px;
+				}
+				caption {
+					font-size: 12px;
+				}
+
+				th {
+					font-size: 10px;
+				}
+			}
+
+			.c-table-resumo-geral {
+				margin-top: 20px;
+			}
+
+			.c-table th,
+			.c-table td,
+            .c-table-resumo-geral th {
+				font-size: 10px;
+			}
+
+			th {
+				background-color: <%= color %>;
+				color: white;
+			}
+
+			.c-table-resumo-geral th, td {
+				font-size: 12px;
+			}
+
+			tr:nth-child(even) {
+				background-color: lightgrey;
+			}
+
+			.c-div {
+				width: 200px;
+				margin: 10px 0 10px auto;
+                border: 1px solid <%= color %>
+			}
+
+
+			.c-p {
+				padding: 5px 0;
+				font-size: 12px;
+				background-color: white;
+			}
+
+			.c-p b {
+				color: <%= color  %>;
+			}
+
+		</style>
+	</head>
+
+	<body>
+		<div id="wrap" class="orientation-retrato page">
+			<!-- HEADER -->
+			<header>
+				<div>
+					<h1>Relatório de Estatísticas Avançadas</h1>
+					<p><strong>Período:</strong><%=start%> a <%=end%></p>
+					<p class="emissao"><strong>Emissão:</strong><%=now%></p>
+					<p><strong>Operador:</strong><%= profile.nome  %></p>
+					<p><strong>Parte:</strong><%= data.registros.parte %></p>
+				</div>
+				<div class="logotipo">
+					<img src=<%=logo %> alt="logotipo">
+				</div>
+			</header>
+            <table class="c-table">
+                <thead>
+                    <tr>
+                        <th>Posto/Amostra</th>
+                        <th>Nome</th>
+                        <th>Idade</th>
+                        <th>Exame</th>
+                        <th>Status Exame</th>
+                        <th>Status Resultado</th>
+                        <th>Cidade</th>
+                        <th>Bairro</th>
+                        <th>Resultado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% data.registros.dados.forEach(dado => {%>
+                        <tr>
+                            <td><%= dado.posto %>/<%=dado.amostra %>  </td>
+                            <td><%= dado.nome %> </td>
+                            <td><%= dado.idade %> </td>
+                            <td><%= dado.codigo%> </td>
+                            <td><%= dado.statusexm %> </td>
+                            <td><%= dado.statusresultado %> </td>
+                            <td><%= dado.cidade %> </td>
+                            <td><%= dado.bairro %> </td>
+                            <td><%= dado.primeirosDoisResultados%></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+			<% if (data.registros.ehAUltimaParte === '1'){%>
+                <table class="c-table-resumo-geral">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th>Exames</th>
+                            <th>Pacientes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Resumo Geral da Estatística</td>
+                            <td>Totais Gerais:</td>
+                            <td><%= data.registros.totais.somaExames %> </td>
+                            <td><%= data.registros.totais.somaPacientes %> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            <% } %>
+	</body>
+
+</html>

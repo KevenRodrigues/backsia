@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <title>Fechamento de Caixa Sintético</title>
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
+        <meta charset="utf-8" />
+        <style>
+        /** BASICA **/
+        *, html {
+        padding:0;
+        margin:0;
+        }
+        html {
+        font-family: 'Lato', Arial, sans-serif;
+        }
+        @media screen {
+        body {
+        display:flex; flex-direction:column;
+        align-items: center;
+        background-color: #ccc;
+        }
+        #wrap {
+        background-color: #fff;
+        padding: 50px;
+        margin: 30px;
+        box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.25);
+        }
+        #loader{
+            background-color: orangered;
+        }
+        .loader-hide {
+            display:none;
+        }
+        .orientation-retrato{width: 60%;}
+        .orientation-paisagem{width: 80%;}
+        }
+        h1, h2, h3, h4{
+        font-weight: 900;
+        }
+        h1 {
+        font-size: 15px;
+        color: <%= color  %>;
+        }
+        h2 {
+        font-size: 15px;
+        color: <%= color  %>;
+        padding-top: 10px;
+        margin-top: 10px;
+        border-top: 1px solid <%= color  %>;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid <%= color  %>;
+        text-transform: uppercase;
+        }
+        h3 {
+        font-size: 12px;
+        color: <%= color  %>;
+        text-transform: uppercase;
+        }
+        strong {
+        font-weight: 700;
+        font-size: 12px;
+        color: #444;
+        }
+        p {
+        font-weight: 400;
+        font-size: 12px;
+        color: #444;
+        text-transform: capitalize;
+        }
+        .row {
+        display:flex;
+        flex-direction: row;
+        /* margin-bottom: 2px; */
+        }
+        /** HEADER **/
+        header{
+        display:flex;
+        flex-direction: row;
+        align-items:center;
+        margin-bottom: 20px;
+        }
+        header div:first-child{
+        flex:1
+        }
+        header h1 {
+        font-size: 18px;
+        text-transform: uppercase;
+        margin-bottom: 3px;
+        }
+        header strong {
+        margin-right: 3px;
+        }
+        header strong {
+        margin-bottom: 3px;
+        }
+        header p, header strong {
+        font-size:15px;
+        }
+        .logotipo {
+        padding-left:50px
+        }
+        .logotipo img{max-height: 40px;}
+        @media screen {
+            .logotipo img{max-height: 60px;}
+        }
+        /** CONTENT **/
+        .data {
+        padding-bottom: 20px;
+        }
+        .cabecalho {
+        display:flex;
+        align-items: center;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: #444;
+        }
+        .totalgeral {
+        display:flex;
+        padding-top: 10px;
+        margin-top: 10px;
+        border-top-width: 1px;
+        border-top-style: dotted;
+        border-top-color: #ccc;
+        }
+        .resumo {
+        padding-bottom: 30px;
+        }
+        .resumo h2 {
+        margin-bottom: 0;
+        }
+        .totalizador{
+        display: flex;
+        align-items: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: solid 1px #ccc;
+        }
+
+        .totalizador:last-child {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: solid 1px <%= color  %>;
+        }
+
+        .totalizador h4 {
+        font-size: 13px;
+        text-transform: uppercase;
+        color: <%= color  %>;
+        }
+
+        .totalizador-valor {
+        display: flex;
+        padding-left: 10px;
+        }
+
+        .totalizador-valor strong{
+        display: flex;
+        font-size: 13px;
+        padding-right: 5px;
+        }
+
+        .totalizador-valor p{
+        font-size: 13px;
+        }
+        </style>
+    </head>
+    <body>
+        <%if (size === 'retrato') { %>
+        <div id="wrap" class="orientation-retrato">
+        <% } else { %>
+        <div id="wrap" class="orientation-paisagem">
+        <% } %>
+            <!-- HEADER -->
+            <header>
+                <div>
+                    <h1>Fechamento de Caixa Sintético</h1>
+                    <p><strong>Período:</strong><%=start%> a <%=end%></p>
+                    <p class="emissao"><strong>Emissão:</strong><%=now%></p>
+                    <p class="operador"><strong>Operador:</strong><%=profile.nome%></p>
+                </div>
+                <%if (logo) { %>
+                    <div class="logotipo">
+                        <img src="<%= logo %>">
+                    </div>
+                <% } %>
+            </header>
+            <!-- HEADER -->
+            <!-- HTML -->
+            <% data.fimcai.forEach( (item,index,array) => {%>
+                <div class="data">
+                    <h2>Data de abertura: <%= item.key %></h2>
+                    <div class="row cabecalho">
+                        <div style="width: 5%">
+                            <strong>Caixa</strong>
+                        </div>
+                        <div style="width: 15%"">
+                            <strong>Operador</strong>
+                        </div>
+                        <div style="width: 8%"">
+                            <strong>Data</strong>
+                        </div>
+                        <div style="width: 8%"">
+                            <strong>Situação</strong>
+                        </div>
+                        <div style="width: 8%"">
+                            <strong>Entrada</strong>
+                        </div>
+                        <div style="width: 8%"">
+                            <strong>Saída</strong>
+                        </div>
+                        <div style="width: 8%"">
+                            <strong>Dinheiro</strong>
+                        </div>
+                        <div style="width: 8%"">
+                            <strong>Ch. a Vista</strong>
+                        </div>
+                        <div style="width: 8%"">
+                            <strong>C. Débito</strong>
+                        </div>
+                        <div style="width: 8%"">
+                            <strong>C. Crédito</strong>
+                        </div>
+                        <div style="width: 8%"">
+                            <strong>Ch. a Prazo</strong>
+                        </div>
+                        <div style="width: 8%"">
+                            <strong>Outros</strong>
+                        </div>
+                    </div>
+                    <% item.values.forEach( (movcai,index,array) => {%>
+                        <div class="row">
+                            <div style="width: 5%">
+                                <p><%= movcai.caixa_id %></p>
+                            </div>
+                            <div style="width: 15%"">
+                                <p><%= movcai.nome.trim() %></p>
+                            </div>
+                            <div style="width: 8%"">
+                                <p><%= movcai.datcai %></p>
+                            </div>
+                            <div style="width: 8%"">
+                                <%if (movcai.sitcai === 'A') { %>
+                                <p>Aberto</p>
+                                <% } else { %>
+                                <p>Fechado</p>
+                                <% } %>
+                            </div>
+                            <div style="width: 8%"">
+                                <p>R$ <%= parseFloat(movcai.entrada).toFixed(2) %></p>
+                            </div>
+                            <div style="width: 8%"">
+                                <p>R$ <%= parseFloat(movcai.saida).toFixed(2) %></p>
+                            </div>
+                            <div style="width: 8%"">
+                                <p>R$ <%= parseFloat(movcai.dinheiro).toFixed(2) %></p>
+                            </div>
+                            <div style="width: 8%"">
+                                <p>R$ <%= parseFloat(movcai.ch_vista).toFixed(2) %></p>
+                            </div>
+                            <div style="width: 8%"">
+                                <p>R$ <%= parseFloat(movcai.ct_deb).toFixed(2) %></p>
+                            </div>
+                            <div style="width: 8%"">
+                                <p>R$ <%= parseFloat(movcai.ct_cred).toFixed(2) %></p>
+                            </div>
+                            <div style="width: 8%"">
+                                <p>R$ <%= parseFloat(movcai.ch_prazo).toFixed(2) %></p>
+                            </div>
+                            <div style="width: 8%"">
+                                <p>R$ <%= parseFloat(movcai.outros).toFixed(2) %></p>
+                            </div>
+                        </div>
+                    <% }); %>
+                    <div class="row totalgeral">
+                        <div style="width:52%">
+                            <h3>TOTAL GERAL</h3>
+                        </div>
+                        <div style="width:8%">
+                            <p>R$ <%= item.dinheiro.toFixed(2) %></p>
+                        </div>
+                        <div style="width:8%">
+                            <p>R$ <%= item.ch_vista.toFixed(2) %></p>
+                        </div>
+                        <div style="width:8%">
+                            <p>R$ <%= item.ct_deb.toFixed(2) %></p>
+                        </div>
+                        <div style="width:8%">
+                            <p>R$ <%= item.ct_cred.toFixed(2) %></p>
+                        </div>
+                        <div style="width:8%">
+                            <p>R$ <%= item.ch_prazo.toFixed(2) %></p>
+                        </div>
+                        <div style="width:8%">
+                            <p>R$ <%= item.outros.toFixed(2) %></p>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+            <!-- HTML -->
+            <!-- TOTALIZADORES -->
+            <div class="resumo">
+                <h2>Resumo Geral Fechamento de Caixa Sintético</h2>
+                <div class="totalizador">
+                    <h4>A vista</h4>
+                    <div class="totalizador-valor">
+                        <strong>Dinheiro</strong>
+                        <p>R$ <%=parseFloat(data.fimcai[0].totalgeral.dinheiro).toFixed(2)%></p>
+                    </div>
+                    <div class="totalizador-valor">
+                        <strong>Cheque a vista</strong>
+                        <p>R$ <%=parseFloat(data.fimcai[0].totalgeral.ch_vista).toFixed(2)%></p>
+                    </div>
+                </div>
+                <div class="totalizador">
+                    <h4>A Prazo</h4>
+                    <div class="totalizador-valor">
+                        <strong>Cartão Déb.</strong>
+                        <p>R$ <%=parseFloat(data.fimcai[0].totalgeral.ct_deb).toFixed(2)%></p>
+                    </div>
+                    <div class="totalizador-valor">
+                        <strong>Cartão Créd.</strong>
+                        <p>R$ <%=parseFloat(data.fimcai[0].totalgeral.ct_cred).toFixed(2)%></p>
+                    </div>
+                    <div class="totalizador-valor">
+                        <strong>Ch. Prazo</strong>
+                        <p>R$ <%=parseFloat(data.fimcai[0].totalgeral.ch_prazo).toFixed(2)%></p>
+                    </div>
+                    <div class="totalizador-valor">
+                        <strong>Outros</strong>
+                        <p>R$ <%=parseFloat(data.fimcai[0].totalgeral.outros).toFixed(2)%></p>
+                    </div>
+                </div>
+            </div>
+            <!-- TOTALIZADORES -->
+        </div>
+    </body>
+</html>

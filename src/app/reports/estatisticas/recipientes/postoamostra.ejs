@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Estatística de Recipientes</title>
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
+		<meta charset="utf-8" />
+		<style>
+				/** BASICA **/
+				*, html {
+				padding:0;
+				margin:0;
+			}
+			html {
+				font-family: 'Lato', Arial, sans-serif;
+			}
+			@media screen {
+				body {
+					display:flex; flex-direction:column;
+					align-items: center;
+					background-color: #ccc;
+				}
+				#wrap {
+					background-color: #fff;
+					padding: 50px;
+					margin: 30px;
+					box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.25);
+				}
+				.orientation-retrato{width: 60%;}
+				.orientation-paisagem{width: 80%;}
+			}
+			h1{
+				font-weight: 900;
+				color: <%= color  %>;
+			}
+
+			strong {
+				font-weight: 700;
+				font-size: 12px;
+				color: #444;
+			}
+			p {
+				font-weight: 400;
+				font-size: 12px;
+				color: #444;
+				text-transform: capitalize;
+			}
+			.row {
+				display:flex;
+			}
+			.column {
+				display:flex;
+				flex-direction: column;
+			}
+			/** HEADER **/
+			header{
+				display:flex;
+				align-items:center;
+				margin-bottom: 20px;
+			}
+			header div:first-child{
+				flex:1
+			}
+			header h1 {
+				font-size: 18px;
+				text-transform: uppercase;
+				margin-bottom: 3px;
+			}
+			header strong {
+				margin-right: 3px;
+				margin-bottom: 3px;
+			}
+			header p, header strong {
+				font-size:15px;
+			}
+			.logotipo {
+				padding-left:50px
+			}
+			.logotipo img{max-height: 40px;}
+			@media screen {
+				.logotipo img{max-height: 60px;}
+			}
+			/* CONTENT */
+			@page {
+				margin: 2cm;
+			}
+			.container {
+				width: 100%;
+			}
+
+			.c-table,
+            .c-table--resumo-do-dia,
+			.c-table-resumo-geral {
+				width: 100%;
+                border-collapse: collapse;
+			}
+
+            .c-table--resumo-do-dia {
+                margin-top: 10px;
+            }
+
+            .c-table tr:nth-child(odd) {
+				background-color: lightgrey;
+			}
+
+            .c-table--resumo-do-dia tr {
+                background-color: #fff;
+            }
+
+            table {
+                font-weight: 700;
+            }
+
+            .c-table-resumo-geral {
+				margin-top: 20px;
+			}
+
+			.c-table-resumo-geral th, td {
+				font-size: 12px;
+			}
+
+			caption {
+				font-weight: 900;
+				margin: 15px 0;
+				font-size: 15px;
+                text-align: left;
+			}
+
+            th {
+                text-align: left;
+                padding: 5px 10px;
+                margin-bottom: 10px;
+                background-color: <%= color %>;
+				color: white;
+			}
+
+			th, td {
+                padding: 5px 10px;
+				font-size: 10px;
+                width: 20%;
+			}
+
+            th:nth-child(4), td:nth-child(4) {
+                width: 15%;
+                text-align: end;
+            }
+
+            .c-main__h3 {
+				color: <%= color  %>;
+				margin: 25px auto;
+			}
+
+		</style>
+	</head>
+
+	<body>
+		<div id="wrap" class="orientation-retrato page">
+			<!-- HEADER -->
+			<header>
+				<div>
+					<h1>Estatísticas de Entrega - Relatório: Posto+Amostra</h1>
+					<p><strong>Período:</strong><%=start%> a <%=end%></p>
+					<p class="emissao"><strong>Emissão:</strong><%=now%></p>
+                    <p class="emissao"><strong>Operador:</strong><%=profile.nome%></p>
+                    <p class="emissao"><strong>Parte:</strong><%=data.parte%></p>
+				</div>
+                <%if (logo) { %>
+                    <div class="logotipo">
+                        <img src="<%= logo %>">
+                    </div>
+                <% } %>
+			</header>
+            <% for (const registro of data.registros) { %>
+                <% for (const item of registro.postoAmostra) { %>
+                    <h3 class="c-main__h3"><%=data.tipoDeData%>: <%=registro.data%></h3>
+                    <table class="c-table">
+                        <caption><%=item.paciente%></caption>
+                        <thead>
+                            <tr>
+                                <th>Posto+Amostra</th>
+                                <th>Tubo</th>
+                                <th>Exame(s)</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%for (const tubo of item.tubos) {%>
+                                <tr>
+                                    <td><%=item.posto%> / <%=item.amostra%></td>
+                                    <td><%=tubo.codrecip%> - <%=tubo.descrecip%></td>
+                                    <td><%=tubo.exames.join(", ")%></td>
+                                    <td><%=tubo.total%></td>
+                                </tr>
+                            <%}%>
+                        </tbody>
+                    </table>
+                    <table class="c-table--resumo-do-dia">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th>Total de Tubos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><%=item.total%></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                <%}%>
+            <%}%>
+            <% if (data.ehAUltimaParte === '1') {%>
+                <table class="c-table-resumo-geral">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Tubos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Resumo Geral da Estatística</td>
+                            <td>Total de Tubos: </td>
+                            <td></td>
+                            <td><%=data.totalDeTubos%></td>
+                        </tr>
+                    </tbody>
+                </table>
+            <%}%>
+	</body>
+</html>

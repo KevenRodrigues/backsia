@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <title>"Relatório de exames enviados para apoio"</title>
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
+        <meta charset="utf-8" />
+        <style>
+        /** BASICA **/
+        *, html {
+        padding:0;
+        margin:0;
+        }
+        html {
+        font-family: 'Lato', Arial, sans-serif;
+        }
+        @media screen {
+        body {
+        display:flex; flex-direction:column;
+        align-items: center;
+        background-color: #ccc;
+        }
+        #wrap {
+        background-color: #fff;
+        padding: 50px;
+        margin: 30px;
+        box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.25);
+        }
+        #loader{
+            background-color: orangered;
+        }
+        .loader-hide {
+            display:none;
+        }
+        .orientation-retrato{width: 60%;}
+        .orientation-paisagem{width: 80%;}
+        }
+        h1, h2, h3, h4{
+        font-weight: 900;
+        }
+        h1 {
+        font-size: 15px;
+        color: <%= color  %>;
+        }
+        h2 {
+        font-size: 15px;
+        color: <%= color  %>;
+        padding-top: 10px;
+        margin-top: 10px;
+        border-top: 1px solid <%= color  %>;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid <%= color  %>;
+        text-transform: uppercase;
+        }
+        h3 {
+        font-size: 12px;
+        color: <%= color  %>;
+        text-transform: uppercase;
+        }
+        strong {
+        font-weight: 700;
+        font-size: 12px;
+        color: #444;
+        }
+        p {
+        font-weight: 400;
+        font-size: 12px;
+        color: #444;
+        text-transform: capitalize;
+        }
+        .row {
+        display:flex;
+        flex-direction: row;
+        /* margin-bottom: 2px; */
+        }
+        /** HEADER **/
+        header{
+        display:flex;
+        flex-direction: row;
+        align-items:center;
+        margin-bottom: 20px;
+        }
+        header div:first-child{
+        flex:1
+        }
+        header h1 {
+        font-size: 18px;
+        text-transform: uppercase;
+        margin-bottom: 3px;
+        }
+        header strong {
+        margin-right: 3px;
+        }
+        header strong {
+        margin-bottom: 3px;
+        }
+        header p, header strong {
+        font-size:15px;
+        }
+        .logotipo {
+        padding-left:50px
+        }
+        .logotipo img{max-height: 40px;}
+        @media screen {
+            .logotipo img{max-height: 60px;}
+        }
+        /** CONTENT **/
+        .data {
+        padding-bottom: 20px;
+        }
+        .data-last-of-type {
+        padding-bottom: 20px;
+        }
+        .cabecalho {
+        display:flex;
+        align-items: center;
+        padding-bottom: 10px;
+        margin-bottom: 0px;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: #444;
+        }
+        .cabecalho h3 {
+        color: #444;
+        font-size: 15px;
+        font-weight: bold;
+        }
+        .trans {
+        display: flex;
+        align-items: center;
+        padding: 5px 0;
+        border-bottom: 1px dotted #ccc;
+        }
+        .trans-last-of-type {
+        padding: 5px 0;
+        border-bottom: 0;
+        /* margin-bottom: -10px; */
+        }
+        </style>
+    </head>
+    <body>
+        <%if (size === 'retrato') { %>
+        <div id="wrap" class="orientation-retrato">
+        <% } else { %>
+        <div id="wrap" class="orientation-paisagem">
+        <% } %>
+            <!-- HEADER -->
+            <header>
+                <div>
+                    <h1>"Relatório de exames enviados para apoio"</h1>
+                    <p><strong>Apoio:</strong><%= data[0].razao.trim() %></p>
+                    <p class="emissao"><strong>Emissão:</strong><%=now%></p>
+                    <p class="operador"><strong>Operador:</strong><%=profile.nome%></p>
+                </div>
+                <%if (logo) { %>
+                    <div class="logotipo">
+                        <img src="<%= logo %>">
+                    </div>
+                <% } %>
+            </header>
+            <!-- HEADER -->
+            <% data.forEach( (item,index,array) => { %>
+                <% if (index === (array.length -1)) { %>
+                <div class="data-last-of-type">
+                <% } else { %>
+                <div class="data">
+                <% } %>
+                    <div class="row cabecalho">
+                        <h3><%= item.paciente.trim() %></h3>
+                    </div>
+                    <% item.exames.forEach( (exm,index,array) => {%>
+                        <% if (index === (array.length -1)) { %>
+                        <div class="row trans-last-of-type">
+                        <% } else { %>
+                        <div class="row trans">
+                        <% } %>
+                            <div style="width: 8%;text-align: center;">
+                                <p><%= exm.codigo.trim() %></p>
+                            </div>
+                            <div style="width: 42%;">
+                                <p><%= exm.descricao.trim() %></p>
+                            </div>
+                            <div style="width: 50%;">
+                                <p><%= exm.codexmapoiob2b %></p>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% }) %>
+        </div>
+    </body>
+</html>

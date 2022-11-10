@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Estatística de Médicos</title>
+		<link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
+		<meta charset="utf-8" />
+		<style>
+				/** BASICA **/
+				*, html {
+				padding:0;
+				margin:0;
+			}
+			html {
+				font-family: 'Lato', Arial, sans-serif;
+			}
+			@media screen {
+				body {
+					display:flex; flex-direction:column;
+					align-items: center;
+					background-color: #ccc;
+				}
+				#wrap {
+					background-color: #fff;
+					padding: 50px;
+					margin: 30px;
+					box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.25);
+				}
+				.orientation-retrato{width: 60%;}
+				.orientation-paisagem{width: 80%;}
+			}
+			h1{
+				font-weight: 900;
+				color: <%= color  %>;
+			}
+
+			strong {
+				font-weight: 700;
+				font-size: 12px;
+				color: #444;
+			}
+			p {
+				font-weight: 400;
+				font-size: 12px;
+				color: #444;
+				text-transform: capitalize;
+			}
+			.row {
+				display:flex;
+			}
+			.column {
+				display:flex;
+				flex-direction: column;
+			}
+			/** HEADER **/
+			header{
+				display:flex;
+				align-items:center;
+				margin-bottom: 20px;
+			}
+			header div:first-child{
+				flex:1
+			}
+			header h1 {
+				font-size: 18px;
+				text-transform: uppercase;
+				margin-bottom: 3px;
+			}
+			header strong {
+				margin-right: 3px;
+				margin-bottom: 3px;
+			}
+			header p, header strong {
+				font-size:15px;
+			}
+			.logotipo {
+				padding-left:50px
+			}
+			.logotipo img{max-height: 40px;}
+			@media screen {
+				.logotipo img{max-height: 60px;}
+			}
+			/* CONTENT */
+			@page {
+				margin: 2cm;
+			}
+			.container {
+				width: 100%;
+			}
+
+			.c-table-medicos,
+			.c-table-resumo-geral {
+				width: 100%;
+				border-collapse: collapse;
+			}
+
+            .c-table-resumo-geral {
+                font-weight: 700;
+            }
+
+			caption {
+				font-weight: 900;
+				margin: 15px 0;
+				font-size: 15px;
+                text-align: left;
+			}
+
+			th, td {
+				text-align: center;
+				padding: 5px 10px;
+			}
+
+			th {
+				margin-bottom: 10px;
+                background-color: <%= color %>;
+                color: white;
+			}
+
+            tr:nth-child(even) {
+				background-color: lightgrey;
+			}
+
+			td {
+				font-size: 12px;
+			}
+
+			@media print {
+				td {
+					font-size: 8px;
+				}
+				caption {
+					font-size: 12px;
+				}
+
+				th {
+					font-size: 10px;
+				}
+			}
+
+			.c-table-resumo-geral {
+				margin-top: 20px;
+			}
+
+			.c-table-medicos th,
+			.c-table-medicos td,
+            .c-table-resumo-geral th {
+				font-size: 12px;
+				width: 25%;
+			}
+
+			.c-table-resumo-geral th, td {
+				font-size: 12px;
+			}
+            .logotipo {
+                padding-left:50px
+            }
+            .logotipo img{max-height: 40px;}
+                @media screen {
+                .logotipo img{max-height: 60px;}
+            }
+		</style>
+	</head>
+
+	<body>
+		<div id="wrap" class="orientation-retrato page">
+			<!-- HEADER -->
+			<header>
+				<div>
+					<h1>Estatística de Médicos - Relatório: Geral</h1>
+					<p><strong>Período:</strong><%=start%> a <%=end%></p>
+					<p class="emissao"><strong>Emissão:</strong><%=now%></p>
+					<p class="emissao"><strong>Operador:</strong><%=profile.nome%></p>
+				</div>
+                <%if (logo) { %>
+                    <div class="logotipo">
+                        <img src="<%= logo %>">
+                    </div>
+                <% } %>
+			</header>
+            <table class="c-table-medicos">
+                <thead>
+                    <tr>
+                        <th>CRM</th>
+                        <th>Nome</th>
+                        <th>Pacientes</th>
+                        <th>Exames</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% data.registros.dadosTratados.forEach(dado => {%>
+                        <tr>
+                            <td><%=dado.crm %> </td>
+                            <td><%=dado.nome_med %> </td>
+                            <td><%= dado.totpac %> </td>
+                            <td><%= dado.totexa%> </td>
+                        </tr>
+                    <%})%>
+                </tbody>
+            </table>
+            <table class="c-table-resumo-geral">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>Pacientes</th>
+                        <th>Exames</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Resumo Geral da Estatística</td>
+                        <td>Totais Gerais:</td>
+                        <td><%= data.registros.resumoGeral.totalGeralPacientes %> </td>
+                        <td><%= data.registros.resumoGeral.totalGeralExames %> </td>
+                    </tr>
+                </tbody>
+            </table>
+	</body>
+
+</html>

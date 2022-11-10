@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <title>Estatística de Triagem</title>
+        <link
+            href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap"
+            rel="stylesheet"
+        />
+        <meta charset="utf-8" />
+        <style>
+            /** BASICA **/
+            *,
+            html {
+                padding: 0;
+                margin: 0;
+            }
+            html {
+                font-family: 'Lato', Arial, sans-serif;
+            }
+            @media screen {
+                body {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    background-color: #ccc;
+                }
+                #wrap {
+                    background-color: #fff;
+                    padding: 50px;
+                    margin: 30px;
+                    box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.25);
+                }
+                .orientation-retrato {
+                    width: 60%;
+                }
+                .orientation-paisagem {
+                    width: 80%;
+                }
+            }
+            h1 {
+                font-weight: 900;
+                font-size: 15px;
+                color: <%= color %>;
+            }
+
+            strong {
+                font-weight: 700;
+                font-size: 12px;
+                color: #444;
+            }
+            p {
+                font-weight: 400;
+                font-size: 12px;
+                color: #444;
+                text-transform: capitalize;
+            }
+            .row {
+                display: flex;
+            }
+            /** HEADER **/
+            header {
+                display: flex;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+            header div:first-child {
+                flex: 1;
+            }
+            header h1 {
+                font-size: 18px;
+                text-transform: uppercase;
+                margin-bottom: 3px;
+            }
+            header strong {
+                margin-right: 3px;
+                margin-bottom: 3px;
+            }
+            header p,
+            header strong {
+                font-size: 15px;
+            }
+            .logotipo {
+                padding-left: 50px;
+            }
+            .logotipo img {
+                max-height: 40px;
+            }
+            @media screen {
+                .logotipo img {
+                    max-height: 60px;
+                }
+            }
+            /* CONTENT */
+            @page {
+                margin: 2cm;
+            }
+            .container {
+                width: 100%;
+            }
+
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                border: none;
+            }
+
+            table tr:nth-child(even) {
+                background-color: lightgrey;
+            }
+
+            tr {
+                border: none;
+            }
+
+            table td:nth-child(5) {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 300px;
+            }
+
+            .c-table-resumo-geral {
+                font-size: 12px;
+                margin-top: 10px;
+            }
+
+            .c-table-resumo-geral td {
+                font-weight: 700;
+            }
+
+            caption {
+                font-weight: 900;
+                margin: 15px 0;
+                font-size: 15px;
+                color: <%= color %>;
+            }
+
+            table th,
+            table td {
+                text-align: center;
+                padding: 5px 10px;
+                max-width: 400px;
+                white-space: wrap;
+            }
+
+            table th {
+                margin-bottom: 10px;
+                background-color: <%= color %>;
+                color: white;
+            }
+
+            table td {
+                font-size: 12px;
+            }
+
+            @media print {
+                table td {
+                    font-size: 8px;
+                }
+                caption {
+                    font-size: 12px;
+                }
+
+                table th {
+                    font-size: 10px;
+                    margin-bottom: 10px;
+                    background-color: <%= color %>;
+                    color: white;
+                }
+
+                table tr:nth-child(even) {
+                background-color: lightgrey;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="wrap" class="orientation-retrato page">
+            <!-- HEADER -->
+            <header>
+                <div>
+                    <h1>Estatística de Triagem</h1>
+                    <p><strong>Período:</strong><%=start%> a <%=end%></p>
+                    <p class="emissao"><strong>Emissão:</strong><%=now%></p>
+                    <p class="emissao">
+                        <strong>Operador:</strong><%=profile.nome%>
+                    </p>
+                    <p class="emissao">
+                        <strong>Parte:</strong><%=data.registros.parte%>
+                    </p>
+                </div>
+                <div class="logotipo">
+                    <img src=<%=logo%> alt="logo">
+                </div>
+            </header>
+            <!-- HEADER -->
+            <div class="container">
+                <% for (let item = 0; item <
+                data.registros.exames.length;item++) {%>
+                <table>
+                    <caption style="text-align: left">
+                        Data de Triagem:
+                        <%=!data.registros.exames[item].datatri? 'Indisponível'
+                        : data.registros.exames[item].datatri %>
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th>Posto</th>
+                            <th>Amostra</th>
+                            <th>Paciente</th>
+                            <th>Hora</th>
+                            <th>Exame</th>
+                            <th>Recipiente</th>
+                            <th>Triado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for (let i = 0; i <
+                        data.registros.exames[item].itens.length; i++) {%>
+                        <tr>
+                            <td>
+                                <%= data.registros.exames[item].itens[i].posto%>
+                            </td>
+                            <td>
+                                <%=
+                                data.registros.exames[item].itens[i].amostra%>
+                            </td>
+                            <td>
+                                <%=
+                                data.registros.exames[item].itens[i].nomeprontu%>
+                            </td>
+                            <td>
+                                <%=
+                                data.registros.exames[item].itens[i].horatri%>
+                            </td>
+                            <td>
+                                <%=
+                                data.registros.exames[item].itens[i].exames%>
+                            </td>
+                            <td>
+                                <%=
+                                data.registros.exames[item].itens[i].reciptri_id%>
+                                <%=
+                                data.registros.exames[item].itens[i].descricao%>
+                            </td>
+                            <td
+                                style="color: <%= data.registros.exames[item].itens[i].triado === '0' ? 'red': '#196a1a' %> "
+                            >
+                                <%= data.registros.exames[item].itens[i].triado
+                                === '0' ? 'Não': 'Sim'%>
+                            </td>
+                        </tr>
+                        <%}%>
+                    </tbody>
+                </table>
+                <%}if (data.registros.ehAUltimaParte === '1') {%>
+                <table class="c-table-resumo-geral">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th>Triados</th>
+                            <th>Não Triados</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Resumo Geral</td>
+                            <td>Totais Gerais:</td>
+                            <td><%= data.registros.totais.triados%></td>
+                            <td><%= data.registros.totais.naoTriados%></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <%}%>
+            </div>
+        </div>
+    </body>
+</html>
